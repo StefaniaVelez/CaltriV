@@ -26,6 +26,10 @@ export default function App() {
       </KeyboardAvoidingView>
     );
   };
+
+  const Borrar = () => {
+    alert('hola')
+  }
   
   const Enviar = () => {
     fetch("https://manukga.onrender.com", {
@@ -60,7 +64,7 @@ export default function App() {
           <Text style={styles.texto1}>Radio externo</Text>
           <View style={styles.verde}></View>
           <TextInput
-            style={styles.inputs1}
+            style={styles.inputs2}
             keyboardType="numeric"
             onChangeText={(texto) => setData({ ...data, logintud: texto })}
             placeholder="0.00"
@@ -70,7 +74,7 @@ export default function App() {
           <Text style={styles.texto2}>Radio interno</Text>
           <View style={styles.azul}></View>
           <TextInput
-            style={styles.inputs1}
+            style={styles.inputs2}
             keyboardType="numeric"
             keyboard
             onChangeText={(texto) => setData({ ...data, logintud: texto })}
@@ -149,15 +153,43 @@ export default function App() {
         >
           <Text style={styles.textBtn1}>Enviar</Text>
         </TouchableOpacity>
-        <Button title="Encender foco" />
-      </View>
-    </View>
 
-    
+        <TouchableOpacity
+          style={styles.botonBorrar}
+          onPressIn={alert("hola")}
+        >
+          <Text style={styles.textBtn2}>Borrar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.btnDuda}>
+        <Text style={styles.btnDudaText}>?</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  btnDuda:{
+    width:80,
+    borderWidth:8,
+    borderColor:'#4D4D4D',
+    flexDirection: 'row',
+    justifyContent:'center',
+    height:80,
+    alignItems:'center',
+    position: 'absolute',
+    bottom:0,
+    backgroundColor: 'white',
+    borderRadius:100,
+  },
+
+  btnDudaText:{
+    fontSize:50,
+    fontWeight:'bold',
+    color: '#4D4D4D',
+  },
+
   input: {
     width: '80%',
     height: 40,
@@ -176,6 +208,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F6F6F6',
   },
 
   marco: {
@@ -200,7 +233,8 @@ const styles = StyleSheet.create({
     marginBottom:130,
     marginRight: -30,
     position: 'relative',
-    marginTop:-100,
+    marginTop:-10,
+    backgroundColor: '#F6F6F6',
   },
 
   tio1: {
@@ -288,7 +322,7 @@ const styles = StyleSheet.create({
   Fre:{
     width: '100%',
     height: 30,
-    marginBottom: 5,
+    marginBottom: 15,
     flexDirection:'row',
     justifyContent:'center',
     marginTop:10,
@@ -303,12 +337,12 @@ const styles = StyleSheet.create({
     height:50
   },
 
-  /*inputsDiv: {
+  inputsDiv: {
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    marginBottom: 20,
-  },*/
+    marginTop: 25,
+  },
 
   inputs1: {
     height: 40,
@@ -320,17 +354,55 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
+  inputs2: {
+    height: 40,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 5,
+  },
+
   botonEnviar: {
-    backgroundColor: "green",
+    backgroundColor: "#F6F6F6",
     padding: 5,
     width: 100,
-    color: "white",
+    height: 50,
     textAlign: "center",
     borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth:5,
+    borderColor:'#64E1A2',
   },
 
   textBtn1: {
-    color: "white",
+    color: "#64E1A2",
     textAlign: "center",
+    fontWeight: 'bold',
+    fontSize: 18,
   },
+
+  botonBorrar: {
+    backgroundColor: "#F6F6F6",
+    padding: 5,
+    width: 100,
+    height: 50,
+    textAlign: "center",
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth:5,
+    borderColor:'#FF3131',
+  },
+
+  textBtn2: {
+    color: "#FF3131",
+    textAlign: "center",
+    fontWeight: 'bold',
+    fontSize: 18,
+  }
 });

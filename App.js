@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView
 } from "react-native";
+import confetti from "canvas-confetti";
 
 import React from 'react';
 import { useState } from "react";
@@ -17,42 +18,36 @@ import { useState } from "react";
 export default function App() {
   const [text, setText] = useState("Hola");
   const [data, setData] = useState({});
-
-  const App = () => {
-    return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        {/* Aquí va tu interfaz */}
-        <TextInput style={styles.input} placeholder="Ingresa texto" />
-      </KeyboardAvoidingView>
-    );
-  };
+  const [textos, setTextos] = useState('');
+  const [textos1, setTextos1] = useState('');
+  const [prueba, setPrueba] = useState({ texto1: '', texto2: '' })
 
   const Borrar = () => {
-    alert('hola')
+    // alert('hola')
   }
-  
+
   const Enviar = () => {
-    fetch("https://manukga.onrender.com", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(data), // Convierte los datos a JSON 
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        setText("Respuesta de la API:" + responseData[0]);
-        console.log("Respuesta de la API:", responseData)
-        // Puedes realizar acciones adicionales aquí, como mostrar un mensaje al usuario. 
+
+    try {
+      fetch("https://manukga.onrender.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // body: JSON.stringify(data), // Convierte los datos a JSON 
       })
-      .catch((error) => {
-        console.error("Error al enviar el formulario:", error);
-      });
+        .then((response) => response.json())
+        .then((responseData) => {
+
+        })
+    } catch (error) {
+      alert('El error es: '+error)
+    }
   };
 
   return (
     <View style={styles.container}>
-      
+
       <View style={styles.marco}>
       </View>
 
@@ -66,8 +61,12 @@ export default function App() {
           <TextInput
             style={styles.inputs2}
             keyboardType="numeric"
-            onChangeText={(texto) => setData({ ...data, logintud: texto })}
+            onChangeText={(texto) => {
+              setData({ ...data, radioE: texto })
+              setTextos(texto)
+            }}
             placeholder="0.00"
+            value={textos}
           />
         </View>
         <View style={styles.tio2}>
@@ -77,8 +76,12 @@ export default function App() {
             style={styles.inputs2}
             keyboardType="numeric"
             keyboard
-            onChangeText={(texto) => setData({ ...data, logintud: texto })}
+            onChangeText={(texto)=>{
+              setData({ ...data, radioI: texto })
+              setTextos1(texto)
+            }}
             placeholder="0.00"
+            value={textos1}
           />
         </View>
         <View style={styles.circulo}>
@@ -91,55 +94,65 @@ export default function App() {
 
       <View style={styles.Fre}>
         <Text style={styles.texto3}>Frecuencia</Text>
-          <TextInput
-            style={styles.inputs1}
-            keyboardType="numeric"
-            onChangeText={(text) => setData({ ...data, frecuencia: text })}
-            placeholder="Frecuencia"
-          />
+        <TextInput
+          style={styles.inputs1}
+          keyboardType="numeric"
+          onChangeText={null}
+          placeholder="Frecuencia"
+          value={null}
+        />
       </View>
 
       <View style={styles.Fre}>
-      <Text style={styles.texto3}>Longitud</Text>
-      <TextInput
+        <Text style={styles.texto3}>Longitud</Text>
+        <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={(texto) => setData({ ...data, logintud: texto })}
+          onChangeText={null}
           placeholder="Longitud"
+          value={null}
         />
       </View>
 
-      
+
       <View style={styles.Fre}>
-      <Text style={styles.texto3}>Permitividad relativa</Text>
-      <TextInput
+        <Text style={styles.texto3}>Permitividad relativa</Text>
+        <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={(texto) => setData({ ...data, logintud: texto })}
+          onChangeText={
+            function(texto){
+              setData({...data,permitividadR:texto})
+            }
+          }
           placeholder="e"
+          value={null}
         />
       </View>
 
       <View style={styles.Fre}>
-      <Text style={styles.texto3}>Permeabilidad relativa</Text>
-      <TextInput
+        <Text style={styles.texto3}>Permeabilidad relativa</Text>
+        <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={(texto) => setData({ ...data, logintud: texto })}
+          onChangeText={null}
           placeholder="u"
+          value={null}
         />
       </View>
 
-      
-
-
       <View style={styles.Fre}>
-      <Text style={styles.texto3}>Conductividad electrica</Text>
-      <TextInput
+        <Text style={styles.texto3}>Conductividad electrica</Text>
+        <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={(texto) => setData({ ...data, logintud: texto })}
+          onChangeText={
+            (texto)=>{
+              setData({...data,ConductividadE:texto})
+            }
+          }
           placeholder="o"
+        value={textos}
         />
       </View>
 
@@ -149,14 +162,26 @@ export default function App() {
       <View style={styles.inputsDiv}>
         <TouchableOpacity
           style={styles.botonEnviar}
-          onPress={Enviar()}
+          onPress={
+            (e)=>{
+              e.preventDefault();
+              Enviar()
+              // confetti()
+            }
+          }
+
         >
           <Text style={styles.textBtn1}>Enviar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.botonBorrar}
-          onPressIn={alert("hola")}
+          onPressIn={(e) => {
+            e.preventDefault();
+            // alert("hola")
+            setTextos('')
+            setTextos1('')
+          }}
         >
           <Text style={styles.textBtn2}>Borrar</Text>
         </TouchableOpacity>
@@ -170,23 +195,23 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  btnDuda:{
-    width:80,
-    borderWidth:8,
-    borderColor:'#4D4D4D',
+  btnDuda: {
+    width: 80,
+    borderWidth: 8,
+    borderColor: '#4D4D4D',
     flexDirection: 'row',
-    justifyContent:'center',
-    height:80,
-    alignItems:'center',
+    justifyContent: 'center',
+    height: 80,
+    alignItems: 'center',
     position: 'absolute',
-    bottom:0,
+    bottom: 0,
     backgroundColor: 'white',
-    borderRadius:100,
+    borderRadius: 100,
   },
 
-  btnDudaText:{
-    fontSize:50,
-    fontWeight:'bold',
+  btnDudaText: {
+    fontSize: 50,
+    fontWeight: 'bold',
     color: '#4D4D4D',
   },
 
@@ -230,24 +255,24 @@ const styles = StyleSheet.create({
   Padre: {
     width: '100%',
     height: 100,
-    marginBottom:130,
+    marginBottom: 130,
     marginRight: -30,
     position: 'relative',
-    marginTop:-10,
+    marginTop: -10,
     backgroundColor: '#F6F6F6',
   },
 
   tio1: {
-    position:'absolute',
-    width:'30%',
-    height:100,
+    position: 'absolute',
+    width: '30%',
+    height: 100,
     right: 50,
     bottom: -10,
   },
 
   verde: {
-    width:'100%',
-    height:8,
+    width: '100%',
+    height: 8,
     backgroundColor: '#4FCF8F',
   },
 
@@ -259,16 +284,16 @@ const styles = StyleSheet.create({
 
 
   tio2: {
-    position:'absolute',
-    width:'30%',
-    height:100,
+    position: 'absolute',
+    width: '30%',
+    height: 100,
     right: 50,
     bottom: -110,
   },
 
   azul: {
-    width:'100%',
-    height:8,
+    width: '100%',
+    height: 8,
     backgroundColor: '#286F96',
   },
 
@@ -319,22 +344,22 @@ const styles = StyleSheet.create({
     letterSpacing: -0.16,
   },
 
-  Fre:{
+  Fre: {
     width: '100%',
     height: 30,
     marginBottom: 15,
-    flexDirection:'row',
-    justifyContent:'center',
-    marginTop:10,
-    gap:50
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+    gap: 50
   },
 
   texto3: {
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-    width:'30%',
-    height:50
+    width: '30%',
+    height: 50
   },
 
   inputsDiv: {
@@ -374,8 +399,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth:5,
-    borderColor:'#64E1A2',
+    borderWidth: 5,
+    borderColor: '#64E1A2',
   },
 
   textBtn1: {
@@ -395,8 +420,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth:5,
-    borderColor:'#FF3131',
+    borderWidth: 5,
+    borderColor: '#FF3131',
   },
 
   textBtn2: {

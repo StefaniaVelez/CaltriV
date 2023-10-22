@@ -26,22 +26,38 @@ export default function App() {
     // alert('hola')
   }
 
-  const Enviar = () => {
-
+  const Enviar = async () => {
+    console.log(typeof (data))
+    // try {
+    //   fetch("https://linea-transmision.onrender.com/Coaxial/Calculos", {
+    //     method: "POST",
+    //     body: data,
+    //   })
+    //     .then((response) => response.json())
+    //     .then((responseData) => {
+    //       console.log(responseData.detail[{msg}])
+    //     })
+    // } catch (error) {
+    //   alert('El error es: '+error)
+    // }
+    for (key in data) {
+      if (typeof data[key] === 'string') {
+        data[key] = parseFloat(data[key])
+      }
+    }
+    console.log(data)
     try {
-      fetch("https://manukga.onrender.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // body: JSON.stringify(data), // Convierte los datos a JSON 
-      })
-        .then((response) => response.json())
-        .then((responseData) => {
-
-        })
+      const req = await fetch('https://linea-transmision.onrender.com/Coaxial/Calculos',
+        {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          method: 'POST',
+          // body: JSON.stringify({ "a": 0.004, "b": 0.006, "l": 1.2, "f": 100000000, "sigma": 0, "Er": 1, "μr": 1 })
+          body: JSON.stringify(data)
+        });
+      const resultado = await req.json();
+      console.log(resultado)
     } catch (error) {
-      alert('El error es: '+error)
+      console.log(error)
     }
   };
 
@@ -62,7 +78,7 @@ export default function App() {
             style={styles.inputs2}
             keyboardType="numeric"
             onChangeText={(texto) => {
-              setData({ ...data, radioE: texto })
+              setData({ ...data, a: parseFloat(texto) })
               setTextos(texto)
             }}
             placeholder="0.00"
@@ -76,8 +92,8 @@ export default function App() {
             style={styles.inputs2}
             keyboardType="numeric"
             keyboard
-            onChangeText={(texto)=>{
-              setData({ ...data, radioI: texto })
+            onChangeText={(texto) => {
+              setData({ ...data, b: texto })
               setTextos1(texto)
             }}
             placeholder="0.00"
@@ -97,7 +113,10 @@ export default function App() {
         <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={null}
+          onChangeText={(texto) => {
+            setData({ ...data, l: texto })
+            setTextos1(texto)
+          }}
           placeholder="Frecuencia"
           value={null}
         />
@@ -108,9 +127,10 @@ export default function App() {
         <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={null}
+          onChangeText={(texto) => {
+            setData({ ...data, f: texto })
+          }}
           placeholder="Longitud"
-          value={null}
         />
       </View>
 
@@ -121,8 +141,8 @@ export default function App() {
           style={styles.inputs1}
           keyboardType="numeric"
           onChangeText={
-            function(texto){
-              setData({...data,permitividadR:texto})
+            function (texto) {
+              setData({ ...data, sigma: parseInt(texto) })
             }
           }
           placeholder="e"
@@ -135,7 +155,11 @@ export default function App() {
         <TextInput
           style={styles.inputs1}
           keyboardType="numeric"
-          onChangeText={null}
+          onChangeText={
+            function (texto) {
+              setData({ ...data, Er: parseInt(texto) })
+            }
+          }
           placeholder="u"
           value={null}
         />
@@ -147,12 +171,12 @@ export default function App() {
           style={styles.inputs1}
           keyboardType="numeric"
           onChangeText={
-            (texto)=>{
-              setData({...data,ConductividadE:texto})
+            (texto) => {
+              setData({ ...data, μr: texto })
             }
           }
           placeholder="o"
-        value={textos}
+          value={null}
         />
       </View>
 
@@ -163,7 +187,7 @@ export default function App() {
         <TouchableOpacity
           style={styles.botonEnviar}
           onPress={
-            (e)=>{
+            (e) => {
               e.preventDefault();
               Enviar()
               // confetti()
